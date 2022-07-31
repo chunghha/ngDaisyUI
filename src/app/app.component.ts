@@ -1,10 +1,14 @@
+import { NgForOf } from '@angular/common';
 import { Component } from '@angular/core';
+import { CountryCardComponent } from './components/country-card.component';
+import { NavbarComponent } from './components/navbar.component';
 import { CountryService } from './services/country.service';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.css']
+	imports: [NgForOf, NavbarComponent, CountryCardComponent],
+	standalone: true
 })
 export class AppComponent {
 	title = 'ngDaisyUI';
