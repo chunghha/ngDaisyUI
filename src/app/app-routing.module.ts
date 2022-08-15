@@ -1,8 +1,17 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutComponent } from './components/about.component';
+import { HeroComponent } from './components/hero.component';
 
-const routes: Routes = [];
+export const routes: Routes = [
+	{ path: '', component: HeroComponent },
+	{ path: 'about', component: AboutComponent },
+	{
+		path: 'country',
+		loadComponent: () => import('./components/country.component').then(c => c.CountryComponent)
+	}
+];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes), HttpClientModule],

@@ -5,8 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-	imports: [BrowserModule, AppRoutingModule, AppComponent],
-	providers: []
+	imports: [BrowserModule, AppRoutingModule, AppComponent]
 })
 export class AppModule implements DoBootstrap {
 	ngDoBootstrap(appRef: ApplicationRef): void {
