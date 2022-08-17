@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class CountryService {
-	private url = 'https://restcountries.com/v3.1/all';
+  private url = 'https://restcountries.com/v3.1/all';
 
-	constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
-	getCountries() {
-		return this.httpClient.get(this.url);
-	}
+  getCountries() {
+    return this.httpClient.get(this.url);
+  }
 }
