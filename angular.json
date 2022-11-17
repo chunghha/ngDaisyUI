@@ -26,7 +26,7 @@
               "src/styles.css",
               "node_modules/@fontsource/inter/index.css",
               "node_modules/@fontsource/poppins/index.css",
-              "node_modules/@fontsource/space-mono/index.css"
+              "node_modules/@fontsource/fira-mono/index.css"
             ],
             "scripts": []
           },

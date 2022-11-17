@@ -8,7 +8,7 @@ module.exports = {
     fontFamily: {
 			inter: ['inter', 'sans-serif'],
 			poppins: ['poppins', 'serif'],
-			'space-mono': ['space-mono']
+			'fira-mono': ['fira-mono']
 		}
   },
   plugins: [
