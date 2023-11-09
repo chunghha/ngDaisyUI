@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngDaisyUI:build:production"
+              "buildTarget": "ngDaisyUI:build:production"
             },
             "development": {
-              "browserTarget": "ngDaisyUI:build:development"
+              "buildTarget": "ngDaisyUI:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngDaisyUI:build"
+            "buildTarget": "ngDaisyUI:build"
           }
         },
         "test": {
