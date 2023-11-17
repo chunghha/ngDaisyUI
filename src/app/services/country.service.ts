@@ -1,15 +1,20 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { injectQuery } from '@ngneat/query';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CountryService {
+  #http = inject(HttpClient);
+  #query = injectQuery();
+
   private url = 'https://restcountries.com/v3.1/all';
 
-  constructor(private httpClient: HttpClient) {}
-
   getCountries() {
-    return this.httpClient.get(this.url);
+    return this.#query({
+      queryKey: ['countries'] as const,
+      queryFn: () => this.#http.get<any[]>(this.url)
+    });
   }
 }

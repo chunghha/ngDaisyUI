@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, inject } from '@angular/core';
 
 import { CountryService } from '../services/country.service';
 import { CountryCardComponent } from './country-card.component';
@@ -11,16 +10,5 @@ import { CountryCardComponent } from './country-card.component';
   standalone: true
 })
 export class CountryComponent {
-  countries: any;
-  countrySubscription: Subscription = new Subscription();
-
-  constructor(private service: CountryService) { }
-
-  ngOnInit() {
-    this.countrySubscription = this.service.getCountries().subscribe((r: any) => (this.countries = r));
-  }
-
-  ngDestory() {
-    this.countrySubscription.unsubscribe();
-  }
+  result = inject(CountryService).getCountries().result;
 }
