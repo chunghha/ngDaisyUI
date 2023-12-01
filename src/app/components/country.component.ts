@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 
+import { injectQuery } from '@tanstack/angular-query-experimental';
 import { CountryService } from '../services/country.service';
 import { CountryCardComponent } from './country-card.component';
 
@@ -10,5 +11,10 @@ import { CountryCardComponent } from './country-card.component';
   standalone: true
 })
 export class CountryComponent {
-  result = inject(CountryService).getCountries().result;
+  #countryService = inject(CountryService);
+
+  query = injectQuery(() => ({
+    queryKey: ['countries'],
+    queryFn: () => this.#countryService.getCountries()
+  }));
 }
