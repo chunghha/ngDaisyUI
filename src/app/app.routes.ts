@@ -1,7 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
+import { Routes } from '@angular/router';
 import { AboutComponent } from './components/about.component';
 import { HeroComponent } from './components/hero.component';
 
@@ -13,10 +10,3 @@ export const routes: Routes = [
     loadComponent: () => import('./components/country.component').then(c => c.CountryComponent)
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes), HttpClientModule],
-  exports: [RouterModule],
-
-})
-export class AppRoutingModule { }

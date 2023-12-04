@@ -4,14 +4,14 @@ import { RouterModule } from '@angular/router';
 import { select } from '@ngneat/elf';
 import { Subscription } from 'rxjs';
 
-import { AngularQueryDevtoolsComponent } from '@tanstack/angular-query-devtools-experimental';
+import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimental';
 import { NavbarComponent } from './components/navbar.component';
 import { THEMES, themeStore } from './stores/theme.store';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [RouterModule, NgForOf, NavbarComponent, AngularQueryDevtoolsComponent],
+  imports: [RouterModule, NgForOf, NavbarComponent, AngularQueryDevtools],
   standalone: true
 })
 export class AppComponent {
