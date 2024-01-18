@@ -1,12 +1,12 @@
-import { createStore, withProps } from '@ngneat/elf';
+import { createStore, withProps } from '@ngneat/elf'
 
 interface ThemeProps {
-  theme: { isDark: boolean } | null;
+  theme: { isDark: boolean } | null
 }
 
 export const THEMES = {
   DARK: 'rosepine',
-  LIGHT: 'dawn'
-};
+  LIGHT: 'dawn',
+}
 
-export const themeStore = createStore({ name: 'theme' }, withProps<ThemeProps>({ theme: { isDark: false } }));
+export const themeStore = createStore({ name: 'theme' }, withProps<ThemeProps>({ theme: { isDark: false } }))

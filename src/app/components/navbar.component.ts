@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
-import { themeStore } from '../stores/theme.store';
+import { themeStore } from '../stores/theme.store'
 
 @Component({
   selector: 'AppNavbar',
   templateUrl: './navbar.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule]
+  imports: [RouterModule],
 })
 export class NavbarComponent {
   toggleTheme() {
-    themeStore.update(state => ({
+    themeStore.update((state) => ({
       ...state,
-      theme: { isDark: !state.theme?.isDark }
-    }));
+      theme: { isDark: !state.theme?.isDark },
+    }))
   }
 }
