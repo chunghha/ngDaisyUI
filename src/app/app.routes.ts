@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router'
+import type { Routes } from '@angular/router'
 import { AboutComponent } from './components/about.component'
 import { HeroComponent } from './components/hero.component'
 
