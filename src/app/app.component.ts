@@ -1,18 +1,16 @@
-import { DOCUMENT, NgForOf } from '@angular/common'
+import { DOCUMENT } from '@angular/common'
 import { Component, Inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { select } from '@ngneat/elf'
 import { Subscription } from 'rxjs'
 
-import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimental'
 import { NavbarComponent } from './components/navbar.component'
 import { THEMES, themeStore } from './stores/theme.store'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [RouterModule, NgForOf, NavbarComponent, AngularQueryDevtools],
-  standalone: true,
+  imports: [RouterModule, NavbarComponent],
 })
 export class AppComponent {
   title = 'ngDaisyUI'

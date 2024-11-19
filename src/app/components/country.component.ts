@@ -8,7 +8,6 @@ import { CountryCardComponent } from './country-card.component'
   selector: 'Country',
   templateUrl: './country.component.html',
   imports: [CountryCardComponent],
-  standalone: true,
 })
 export class CountryComponent {
   #countryService = inject(CountryService)
