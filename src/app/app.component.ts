@@ -15,7 +15,7 @@ import { THEMES, themeStore } from './stores/theme.store'
 export class AppComponent {
   title = 'ngDaisyUI'
 
-  theme = 'dawn'
+  theme = 'dark'
   themeSubscription: Subscription = new Subscription()
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
