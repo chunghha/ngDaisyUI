@@ -5,8 +5,8 @@ interface ThemeProps {
 }
 
 export const THEMES = {
-  DARK: 'rosepine',
-  LIGHT: 'dawn',
+  DARK: 'dark',
+  LIGHT: 'light',
 }
 
 export const themeStore = createStore({ name: 'theme' }, withProps<ThemeProps>({ theme: { isDark: false } }))
