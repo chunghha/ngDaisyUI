@@ -3,6 +3,9 @@
   "organizeImports": {
     "enabled": true
   },
+  "files": {
+    "ignore": ["*.gen.ts", "src/styles.css"]
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
