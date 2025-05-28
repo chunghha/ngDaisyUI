@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs'
   providedIn: 'root',
 })
 export class CountryService {
-  private url = 'https://restcountries.com/v3.1/all'
+  private url = 'https://restcountries.com/v3.1/all?fields=flags,name,capital,population'
   #http = inject(HttpClient)
 
   getCountries() {
