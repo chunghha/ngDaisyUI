@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common'
-import { Component, Inject } from '@angular/core'
+import { Component, DOCUMENT, Inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { select } from '@ngneat/elf'
 import { Subscription } from 'rxjs'
