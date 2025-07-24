@@ -17,7 +17,7 @@ export class AppComponent {
   theme = 'dark'
   themeSubscription: Subscription = new Subscription()
 
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(@Inject(DOCUMENT) _document: Document) {}
 
   ngOnInit() {
     this.themeSubscription = themeStore.pipe(select((state) => state.theme)).subscribe((s) => this.setTheme(s?.isDark))
