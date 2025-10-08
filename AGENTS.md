@@ -62,9 +62,10 @@ From package.json:
 - test:cov: vitest run --coverage
 - format: biome format
 - lint / lint:fix / check: biome lint + safe fixes
-- check:all: run check then coverage
+- check:all: run check then coverage (aggregates lint + format verification + type checking + tests + coverage)
 
-Run pnpm check and pnpm test before pushing.
+MANDATORY PRE-COMMIT GATE:
+Run `pnpm check:all` before EVERY commit (not just before pushing). Do not create a commit unless it passes successfully. This single command is the authoritative quality gate (it implicitly covers lint, formatting validation, type checking, tests, and coverage run). If you need faster feedback while iterating you may run subsets (`pnpm test --watch`, `pnpm check`), but you must finish with a clean `pnpm check:all` before committing.
 
 ---
 
@@ -183,11 +184,13 @@ Coverage:
 
 ## 10. COMMIT DISCIPLINE
 
-A commit is allowed only if:
+A commit is allowed only if (validated by `pnpm check:all`):
 1. All tests pass (vitest).
-2. Lint & type checks are clean (pnpm check).
+2. Lint & formatting verification and type checks are clean.
 3. Single logical concern (structural OR behavioral).
 4. Message communicates intent (imperative).
+
+`pnpm check:all` is the enforced gate; if it fails, fix issues before committing.
 
 Examples:
 - feat: add user profile route
@@ -282,8 +285,7 @@ During cycle:
 - Refactor? (improved structure, still green)
 
 Before commit:
-- Tests pass
-- Lint + type check clean
+- Run `pnpm check:all` (must pass)
 - Single concern
 - Message categorized
 
@@ -318,16 +320,19 @@ Otherwise prefer:
 
 ## 20. TOOLING HYGIENE
 
-Run regularly:
-- pnpm test
-- pnpm check
-- pnpm type-check (implicit via build, ensure strict)
+Primary gate:
+- pnpm check:all (run before every commit)
+
+During active development (fast loops):
+- pnpm test --watch
+- pnpm check (lint + type + format validation)
+- pnpm test (single run)
+- pnpm type-check (implicit via build if needed)
 
 Recommended future CI steps:
 - Install deps
-- Type check
-- Lint & format verify
-- Tests + coverage threshold
+- pnpm check:all
+- Enforce coverage thresholds / quality gates
 
 ---
 
@@ -386,15 +391,16 @@ Propose changes via docs-only PR with motivating examples.
 
 ## 25. QUICK REFERENCE (TL;DR)
 
-Red: Small failing test
-Green: Minimal passing code
-Refactor: Improve structure without changing behavior
-Tidy First: Structural before behavioral
-Angular: Standalone components, signals, explicit DI
-Server State: TanStack Query (avoid duplicating cache)
-Client State: Signals first; escalate deliberately
-Testing: Behavior-focused, fast, isolated
-Commits: Single concern, clear intent
+Red: Small failing test  
+Green: Minimal passing code  
+Refactor: Improve structure without changing behavior  
+Tidy First: Structural before behavioral  
+Angular: Standalone components, signals, explicit DI  
+Server State: TanStack Query (avoid duplicating cache)  
+Client State: Signals first; escalate deliberately  
+Testing: Behavior-focused, fast, isolated  
+Commits: Single concern, clear intent  
+MANDATORY: `pnpm check:all` passes before every commit
 
 ---
 

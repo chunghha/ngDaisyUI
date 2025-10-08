@@ -2,8 +2,37 @@ import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'CountryCard',
-  templateUrl: './country-card.component.html',
   standalone: true,
+  template: `
+    <div class="flex flex-grow items-stretch h-full">
+      <div
+        class="w-84 card-compact card bg-base-100 shadow-xl transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+      >
+        <figure>
+          <img
+            src="{{ country.flags.svg }}"
+            alt="{{ country.name.official }}"
+          />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title font-poppins text-secondary">
+            {{ country.name.official }}
+          </h2>
+          <p class="font-inter text-xl text-warning">
+            {{ country.capital ?? "" }}
+          </p>
+          @if (country.population) {
+            <p class="font-inter text-lg text-info">
+              {{ country.population.toLocaleString() }}
+            </p>
+          }
+          <div class="card-actions justify-end">
+            <button class="btn-secondary btn font-poppins w-32">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
 })
 export class CountryCardComponent {
   @Input() country: any

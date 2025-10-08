@@ -8,7 +8,15 @@ import { THEMES, themeStore } from './stores/theme.store'
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  standalone: true,
+  template: `
+    <div class="bg-gradient-to-r from-base-100 to-neutral">
+      <div class="max-w-8xl mx-auto pt-4 pr-8 pb-8 pl-8">
+        <AppNavbar />
+        <router-outlet />
+      </div>
+    </div>
+  `,
   imports: [RouterModule, NavbarComponent],
 })
 export class AppComponent {
@@ -23,7 +31,7 @@ export class AppComponent {
     this.themeSubscription = themeStore.pipe(select((state) => state.theme)).subscribe((s) => this.setTheme(s?.isDark))
   }
 
-  ngDestory() {
+  ngOnDestroy() {
     this.themeSubscription.unsubscribe()
   }
 
