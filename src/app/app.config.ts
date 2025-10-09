@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http'
-import { type ApplicationConfig, isDevMode } from '@angular/core'
+import { type ApplicationConfig, isDevMode, provideZonelessChangeDetection } from '@angular/core'
 import { provideRouter } from '@angular/router'
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental'
 import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
@@ -23,6 +23,7 @@ const queryClient = new QueryClient({
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideTanStackQuery(
       queryClient,
       ...(isDevMode()
