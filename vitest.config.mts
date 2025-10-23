@@ -15,6 +15,7 @@ export default defineConfig({
     globals: true,
     environment: "happy-dom",
     setupFiles: ["./src/setupTest.js"],
+    exclude: ["dist/**", "dist/test-out/**", "node_modules/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
@@ -23,6 +24,8 @@ export default defineConfig({
       include: ["src/**/*.ts"],
       // Exclude test files, setup, type declarations, and bootstrap main
       exclude: [
+        "node_modules/**",
+        "dist/test-out/**",
         "src/**/*.spec.*",
         "src/main.ts",
         "src/test.ts",
