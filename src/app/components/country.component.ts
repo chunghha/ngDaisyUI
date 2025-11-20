@@ -40,7 +40,7 @@ export function buildCountriesQuery(countryService: CountryService) {
   imports: [CountryCardComponent],
 })
 export class CountryComponent {
-  #countryService = inject(CountryService)
+  _countryService = inject(CountryService)
 
-  query = injectQuery(() => buildCountriesQuery(this.#countryService))
+  query = injectQuery(() => buildCountriesQuery(this._countryService))
 }
