@@ -2,6 +2,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
       "@app": ["src/app/index.ts"],
