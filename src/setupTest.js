@@ -1,7 +1,8 @@
-/** setupTest.js */
-import '@analogjs/vite-plugin-angular/setup-vitest'
-
+/** setupTest.js - zoneless Angular test bootstrap */
 import { getTestBed } from '@angular/core/testing'
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing'
+import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing'
 
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting())
+getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting(), {
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+})
