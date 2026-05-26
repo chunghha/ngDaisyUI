@@ -1,13 +1,16 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitest/config";
 // Angular vite plugin removed for test stability; templates are inlined
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
-      "@app": path.resolve(__dirname, "src/app"),
+      "@app": path.resolve(rootDir, "src/app"),
     },
   },
   // plugins: [] // Angular plugin removed (templates inlined)

@@ -1,5 +1,7 @@
+import typography from '@tailwindcss/typography'
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {},
@@ -9,5 +11,5 @@ module.exports = {
       'fira-mono': ['fira-mono'],
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [typography],
 }
