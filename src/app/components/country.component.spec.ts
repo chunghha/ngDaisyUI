@@ -1,5 +1,5 @@
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental'
-import { render } from '@testing-library/angular'
+import { fireEvent, render, screen, waitFor } from '@testing-library/angular'
 import { describe, expect, it, vi } from 'vitest'
 import { CountryService } from '../services/country.service'
 import { buildCountriesQuery, COUNTRIES_QUERY_KEY } from './country.component'
@@ -38,8 +38,20 @@ describe('buildCountriesQuery (pure helper)', () => {
 describe('CountryComponent integration (smoke)', () => {
   it('executes query and stores result in QueryClient cache', async () => {
     const data = [
-      { name: { official: 'Alpha' }, flags: { svg: 'a.svg' } },
-      { name: { official: 'Beta' }, flags: { svg: 'b.svg' } },
+      {
+        name: { official: 'Alpha' },
+        capital: ['A City'],
+        continents: ['Europe'],
+        flags: { svg: 'a.svg' },
+        population: 1000,
+      },
+      {
+        name: { official: 'Beta' },
+        capital: ['B City'],
+        continents: ['Asia'],
+        flags: { svg: 'b.svg' },
+        population: 2000,
+      },
     ]
     const mockService: Partial<CountryService> = {
       getCountries: vi.fn().mockResolvedValue(data),
@@ -84,5 +96,77 @@ describe('CountryComponent integration (smoke)', () => {
     const state = qc.getQueryState(COUNTRIES_QUERY_KEY as any)
     expect(state?.status).toBe('error')
     expect(state?.error).toBe(boom)
+  })
+
+  it('filters countries by search text and capital', async () => {
+    const data = [
+      {
+        name: { official: 'Republic of Korea' },
+        capital: ['Seoul'],
+        continents: ['Asia'],
+        flags: { svg: 'kr.svg' },
+        population: 50_000_000,
+      },
+      {
+        name: { official: 'Japan' },
+        capital: ['Tokyo'],
+        continents: ['Asia'],
+        flags: { svg: 'jp.svg' },
+        population: 125_000_000,
+      },
+    ]
+    const mockService: Partial<CountryService> = {
+      getCountries: vi.fn().mockResolvedValue(data),
+    }
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
+
+    await render((await import('./country.component')).CountryComponent, {
+      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+    })
+
+    expect(await screen.findByText('Republic of Korea')).toBeTruthy()
+
+    fireEvent.input(screen.getByRole('searchbox', { name: /search countries/i }), { target: { value: 'seoul' } })
+
+    await waitFor(() => {
+      expect(screen.getByText('Republic of Korea')).toBeTruthy()
+      expect(screen.queryByText('Japan')).toBeNull()
+    })
+  })
+
+  it('filters countries by continent', async () => {
+    const data = [
+      {
+        name: { official: 'Republic of Argentina' },
+        capital: ['Buenos Aires'],
+        continents: ['South America'],
+        flags: { svg: 'ar.svg' },
+        population: 45_000_000,
+      },
+      {
+        name: { official: 'Republic of Guatemala' },
+        capital: ['Guatemala City'],
+        continents: ['North America'],
+        flags: { svg: 'gt.svg' },
+        population: 18_000_000,
+      },
+    ]
+    const mockService: Partial<CountryService> = {
+      getCountries: vi.fn().mockResolvedValue(data),
+    }
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
+
+    await render((await import('./country.component')).CountryComponent, {
+      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+    })
+
+    expect(await screen.findByText('Republic of Argentina')).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: 'South America' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Republic of Argentina')).toBeTruthy()
+      expect(screen.queryByText('Republic of Guatemala')).toBeNull()
+    })
   })
 })

@@ -10,8 +10,8 @@ import { THEMES, themeStore } from './stores/theme.store'
   selector: 'app-root',
   standalone: true,
   template: `
-    <div class="bg-gradient-to-r from-base-100 to-neutral">
-      <div class="max-w-8xl mx-auto pt-4 pr-8 pb-8 pl-8">
+    <div class="min-h-screen bg-[linear-gradient(120deg,var(--color-base-100),var(--color-neutral))] p-3 sm:p-5">
+      <div class="mx-auto max-w-8xl">
         <AppNavbar />
         <router-outlet />
       </div>

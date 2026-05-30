@@ -17,15 +17,15 @@ describe('HeroComponent', () => {
   it('renders the hero heading', async () => {
     await render(HeroComponent)
 
-    const heading = screen.getByRole('heading', { name: /hello there/i })
+    const heading = screen.getByRole('heading', { name: /explore the world/i })
     expect(heading).toBeTruthy()
     expect(heading.tagName).toBe('H1')
   })
 
-  it('renders the primary call-to-action button', async () => {
+  it('renders the primary call-to-action link', async () => {
     await render(HeroComponent)
 
-    const cta = screen.getByRole('button', { name: /get started/i })
+    const cta = screen.getByRole('link', { name: /get started/i })
     expect(cta).toBeTruthy()
     // Button should advertise primary intent via Tailwind/DaisyUI class
     expect(cta.className).toMatch(/btn/)

@@ -7,10 +7,10 @@ import { themeStore } from '../stores/theme.store'
   selector: 'AppNavbar',
   standalone: true,
   template: `
-    <div class="navbar bg-neutral shadow-lg mb-2">
+    <div class="navbar sticky top-4 z-50 mb-4 rounded-full border border-base-content/10 bg-base-100/80 px-4 shadow-xl shadow-base-content/5 backdrop-blur-xl">
       <div class="navbar-start">
         <div class="dropdown z-[1000]">
-          <label tabindex="0" class="btn btn-ghost btn-circle">
+          <button tabindex="0" class="btn btn-ghost btn-circle" aria-label="Open navigation menu">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -25,10 +25,10 @@ import { themeStore } from '../stores/theme.store'
                 d="M4 6h16M4 12h16M4 18h7"
               />
             </svg>
-          </label>
+          </button>
           <ul
             tabindex="0"
-            class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            class="menu menu-compact dropdown-content mt-3 w-52 rounded-3xl border border-base-content/10 bg-base-100 p-2 shadow-2xl"
           >
             <li><a routerLink="">Homepage</a></li>
             <li><a routerLink="about">About</a></li>
@@ -37,10 +37,10 @@ import { themeStore } from '../stores/theme.store'
         </div>
       </div>
       <div class="navbar-center">
-        <a class="font-poppins normal-case text-xl">daisyUI</a>
+        <a class="font-poppins text-xl font-black tracking-[-0.04em] text-contrast">ngDaisy<span class="text-primary">UI</span></a>
       </div>
       <div class="navbar-end">
-        <button class="btn btn-ghost btn-circle" (click)="toggleTheme()">
+        <button class="btn btn-ghost btn-circle" aria-label="Toggle theme" (click)="toggleTheme()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

@@ -19,6 +19,10 @@ function isDark() {
   return themeStore.state.theme?.isDark
 }
 
+function getThemeToggle() {
+  return screen.getByRole('button', { name: /toggle theme/i })
+}
+
 describe('NavbarComponent (theme toggle)', () => {
   beforeEach(() => {
     themeStore.reset()
@@ -27,7 +31,7 @@ describe('NavbarComponent (theme toggle)', () => {
   it('should render the toggle button', async () => {
     await renderNavbar()
 
-    const button = screen.getByRole('button')
+    const button = getThemeToggle()
     expect(button).toBeTruthy()
     expect(isDark()).toBe(false)
   })
@@ -35,7 +39,7 @@ describe('NavbarComponent (theme toggle)', () => {
   it('should toggle theme from light -> dark on click', async () => {
     await renderNavbar()
 
-    const button = screen.getByRole('button')
+    const button = getThemeToggle()
     expect(isDark()).toBe(false)
 
     await fireEvent.click(button)
@@ -46,7 +50,7 @@ describe('NavbarComponent (theme toggle)', () => {
   it('should toggle theme dark -> light on second click', async () => {
     await renderNavbar()
 
-    const button = screen.getByRole('button')
+    const button = getThemeToggle()
     expect(isDark()).toBe(false)
 
     await fireEvent.click(button)
@@ -60,7 +64,7 @@ describe('NavbarComponent (theme toggle)', () => {
     await renderNavbar()
 
     const initialKeys = Object.keys(themeStore.state)
-    const button = screen.getByRole('button')
+    const button = getThemeToggle()
 
     await fireEvent.click(button)
     const afterKeys = Object.keys(themeStore.state)

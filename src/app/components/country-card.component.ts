@@ -1,39 +1,127 @@
 import { Component, Input } from '@angular/core'
+import type { Country } from '../services/country.service'
+
+function firstValue(values?: Record<string, string>): string | undefined {
+  return Object.values(values ?? {})[0]
+}
 
 @Component({
   selector: 'CountryCard',
   standalone: true,
   template: `
-    <div class="flex flex-grow items-stretch h-full">
-      <div
-        class="w-84 card-compact card bg-base-100 shadow-xl transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-      >
-        <figure>
-          <img
-            src="{{ country.flags.svg }}"
-            alt="{{ country.name.official }}"
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title font-poppins text-secondary">
-            {{ country.name.official }}
-          </h2>
-          <p class="font-inter text-xl text-warning">
-            {{ country.capital ?? "" }}
-          </p>
-          @if (country.population) {
-            <p class="font-inter text-lg text-info">
-              {{ country.population.toLocaleString() }}
+    <article
+      class="group flex h-full flex-col overflow-hidden border border-base-300 bg-base-100 shadow-base-content/10 shadow-md transition duration-300 ease-out hover:-translate-y-1 hover:border-primary/60 hover:shadow-primary/20 hover:shadow-xl"
+    >
+      <figure class="relative aspect-[1.65] shrink-0 overflow-hidden bg-base-200">
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-base-content/20 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"
+        ></div>
+        <img
+          [src]="country.flags.svg"
+          [alt]="country.flags.alt ?? country.name.official"
+          class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+      </figure>
+
+      <div class="flex min-h-0 flex-1 flex-col justify-between p-5">
+        <div>
+          <div class="flex items-start justify-between gap-3">
+            <p
+              class="inline-flex rounded-full border border-base-300 bg-base-200/70 px-3 py-1 font-inter text-base-content/60 text-xs"
+            >
+              {{ country.continents[0] }}
             </p>
-          }
-          <div class="card-actions justify-end">
-            <button class="btn-secondary btn font-poppins w-32">Details</button>
+            @if (country.cca3) {
+              <p class="inline-flex rounded-full bg-secondary px-3 py-1 font-inter text-secondary-content text-xs">
+                {{ country.cca3 }}
+              </p>
+            }
           </div>
+
+          <div class="mt-4 min-h-32">
+            <h2 class="line-clamp-2 min-h-12 font-poppins text-secondary text-xl leading-tight">
+              {{ country.name.official }}
+            </h2>
+            <p class="mt-1 line-clamp-1 min-h-5 text-base-content/50 text-sm">
+              {{ country.name.common && country.name.common !== country.name.official ? country.name.common : '' }}
+            </p>
+            <p class="mt-3 text-base-content/45 text-xs uppercase tracking-[0.25em]">Capital</p>
+            <p class="mt-1 line-clamp-2 font-inter text-2xl text-base-content leading-tight">
+              {{ countryCapitals()[0] }}
+            </p>
+          </div>
+
+          <dl class="mt-5 grid grid-cols-2 gap-px overflow-hidden border border-base-300 bg-base-300 text-sm">
+            <div class="col-span-2 bg-base-100 p-3">
+              <dt class="text-[10px] text-base-content/45 uppercase tracking-[0.25em]">Population</dt>
+              <dd class="mt-1 font-inter text-3xl text-base-content tabular-nums leading-none">
+                {{ country.population.toLocaleString() }}
+              </dd>
+              <dd class="mt-2 text-base-content/55 text-sm">{{ countryRegionLabel() }}</dd>
+            </div>
+
+            <div class="bg-base-100 p-3">
+              <dt class="text-[10px] text-base-content/45 uppercase tracking-[0.25em]">Density</dt>
+              <dd class="mt-1 text-base-content tabular-nums">{{ populationDensity() }}</dd>
+            </div>
+
+            <div class="bg-base-100 p-3">
+              <dt class="text-[10px] text-base-content/45 uppercase tracking-[0.25em]">Language</dt>
+              <dd class="mt-1 truncate text-base-content">{{ firstLanguage() ?? 'N/A' }}</dd>
+            </div>
+
+            <div class="col-span-2 bg-base-100 p-3">
+              <dt class="text-[10px] text-base-content/45 uppercase tracking-[0.25em]">Area</dt>
+              <dd class="mt-1 truncate text-base-content tabular-nums">{{ countryAreaLabel() }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="mt-5 flex shrink-0 items-center justify-between gap-3">
+          <a
+            [href]="countryMapUrl()"
+            target="_blank"
+            rel="noreferrer"
+            class="link-hover text-base-content/60 text-sm"
+          >
+            Map
+          </a>
+          <button
+            type="button"
+            class="btn btn-primary min-w-36 rounded-full shadow-md shadow-primary/25 transition group-hover:translate-x-1"
+          >
+            Details
+          </button>
         </div>
       </div>
-    </div>
+    </article>
   `,
 })
 export class CountryCardComponent {
-  @Input() country: any
+  @Input({ required: true }) country!: Country
+
+  countryCapitals(): string[] {
+    return Array.isArray(this.country.capital) ? this.country.capital : []
+  }
+
+  countryRegionLabel(): string {
+    return this.country.subregion ?? this.country.region ?? this.country.continents.join(', ')
+  }
+
+  populationDensity(): string {
+    if (!this.country.area) return 'N/A'
+    return `${Math.round(this.country.population / this.country.area).toLocaleString()}/km²`
+  }
+
+  firstLanguage(): string | undefined {
+    return firstValue(this.country.languages)
+  }
+
+  countryAreaLabel(): string {
+    return this.country.area ? `${this.country.area.toLocaleString()} km²` : 'N/A'
+  }
+
+  countryMapUrl(): string {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.country.name.common ?? this.country.name.official)}`
+  }
 }
