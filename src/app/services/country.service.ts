@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Service } from '@angular/core'
 import { lastValueFrom } from 'rxjs'
 
 export interface Country {
@@ -24,9 +24,7 @@ export interface Country {
 const enrichedCountryFields = 'flags,name,capital,population,area,continents,region,subregion,cca3,languages'
 const baseCountryFields = 'flags,name,capital,population,continents,region,subregion'
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class CountryService {
   #http = inject(HttpClient)
 
