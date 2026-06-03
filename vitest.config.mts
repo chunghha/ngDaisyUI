@@ -31,7 +31,6 @@ export default defineConfig({
         "dist/test-out/**",
         "src/**/*.spec.*",
         "src/main.ts",
-        "src/test.ts",
         "src/app/app.config.ts",
         "src/**/*.d.ts",
         "src/setupTest.*",

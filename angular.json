@@ -78,9 +78,6 @@
             "buildTarget": "ngDaisyUI:build"
           }
         },
-        "test": {
-          "builder": "@analogjs/platform:vitest"
-        },
         "deploy": {
           "builder": "angular-cli-ghpages:deploy"
         }
