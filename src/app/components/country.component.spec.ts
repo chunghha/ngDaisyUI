@@ -2,7 +2,7 @@ import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-exper
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular'
 import { describe, expect, it, vi } from 'vitest'
 import { CountryService } from '../services/country.service'
-import { buildCountriesQuery, COUNTRIES_QUERY_KEY } from './country.component'
+import { buildCountriesQuery, COUNTRIES_QUERY_KEY, countryQueryErrorMessage } from './country.component'
 
 /**
  * Pure helper tests (no Angular rendering).
@@ -28,6 +28,22 @@ describe('buildCountriesQuery (pure helper)', () => {
     const out = await queryFn()
     expect(out).toBe(result)
     expect(svc.getCountries).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('countryQueryErrorMessage', () => {
+  it('formats Error instances', () => {
+    expect(countryQueryErrorMessage(new Error('Network failed'))).toBe('Network failed')
+  })
+
+  it('formats HTTP-like error objects', () => {
+    expect(countryQueryErrorMessage({ status: 500, statusText: 'Server Error' })).toBe(
+      'Country API request failed with 500 Server Error',
+    )
+  })
+
+  it('falls back for unknown error shapes', () => {
+    expect(countryQueryErrorMessage({})).toBe('Unable to load countries right now.')
   })
 })
 

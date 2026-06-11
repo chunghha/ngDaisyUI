@@ -1,8 +1,30 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, inject, signal } from '@angular/core'
 import type { Country } from '../services/country.service'
+import { CountryInfoService } from '../services/country-info.service'
 
 function firstValue(values?: Record<string, string>): string | undefined {
   return Object.values(values ?? {})[0]
+}
+
+interface CountryInfoBullet {
+  label: string
+  text: string
+}
+
+function parseCountryInfoBullets(countryInfo: string): CountryInfoBullet[] {
+  return countryInfo
+    .split('\n')
+    .map((line) => line.trim().replace(/^[-*]\s*/, ''))
+    .filter(Boolean)
+    .map((line) => {
+      const [label, ...textParts] = line.split(':')
+
+      if (textParts.length === 0) {
+        return { label: 'Note', text: label.trim() }
+      }
+
+      return { label: label.trim(), text: textParts.join(':').trim() }
+    })
 }
 
 @Component({
@@ -89,16 +111,39 @@ function firstValue(values?: Record<string, string>): string | undefined {
           <button
             type="button"
             class="btn btn-primary min-w-36 rounded-full shadow-md shadow-primary/25 transition group-hover:translate-x-1"
+            [disabled]="isGeneratingCountryInfo()"
+            [attr.aria-label]="isGeneratingCountryInfo() ? 'Generating ' + country.name.official + ' details' : 'Details about ' + country.name.official"
+            (click)="showCountryInfo()"
           >
-            Details
+            {{ isGeneratingCountryInfo() ? 'Generating...' : 'Details' }}
           </button>
         </div>
+
+        @if (countryInfoBullets().length > 0) {
+          <div class="mt-4 space-y-2 border border-primary/20 bg-primary/10 p-3 text-sm leading-6">
+            @for (bullet of countryInfoBullets(); track bullet.label + bullet.text) {
+              <p class="text-base-content/75">
+                <span class="font-poppins font-bold text-primary">{{ bullet.label }}</span>
+                <span class="text-base-content/40">: </span>{{ bullet.text }}
+              </p>
+            }
+          </div>
+        }
       </div>
     </article>
   `,
 })
 export class CountryCardComponent {
   @Input({ required: true }) country!: Country
+
+  #countryInfoService = inject(CountryInfoService)
+
+  countryInfo = signal('')
+  isGeneratingCountryInfo = signal(false)
+
+  countryInfoBullets(): CountryInfoBullet[] {
+    return parseCountryInfoBullets(this.countryInfo())
+  }
 
   countryCapitals(): string[] {
     return Array.isArray(this.country.capital) ? this.country.capital : []
@@ -123,5 +168,19 @@ export class CountryCardComponent {
 
   countryMapUrl(): string {
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.country.name.common ?? this.country.name.official)}`
+  }
+
+  async showCountryInfo(): Promise<void> {
+    if (this.isGeneratingCountryInfo()) return
+
+    this.isGeneratingCountryInfo.set(true)
+
+    try {
+      this.countryInfo.set(await this.#countryInfoService.describeCountry(this.country))
+    } catch (_error) {
+      this.countryInfo.set('Could not generate AI details. Try again when the local AI service is available.')
+    } finally {
+      this.isGeneratingCountryInfo.set(false)
+    }
   }
 }

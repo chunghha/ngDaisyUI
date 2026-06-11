@@ -2,14 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing'
 import { CountryService } from './country.service'
 
-const enrichedCountryUrl =
-  'https://restcountries.com/v3.1/all?fields=flags,name,capital,population,area,continents,region,subregion,cca3,languages'
-const baseCountryUrl =
-  'https://restcountries.com/v3.1/all?fields=flags,name,capital,population,continents,region,subregion'
-
-function nextTick(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 0))
-}
+const countriesDatasetUrl = 'https://raw.githubusercontent.com/mledoze/countries/master/countries.json'
 
 describe('CountryService', () => {
   let service: CountryService
@@ -32,60 +25,90 @@ describe('CountryService', () => {
     expect(service).toBeTruthy()
   })
 
-  it('should fetch countries successfully', async () => {
-    const mockCountries = [
+  it('should fetch and map countries successfully', async () => {
+    const mockCountriesDataset = [
       {
-        name: { official: 'Country A' },
-        flags: { svg: 'a.svg' },
+        name: { common: 'Japan', official: 'Japan' },
         capital: ['A City'],
         population: 1000,
-        continents: ['Europe'],
+        area: 500,
+        region: 'Asia',
+        subregion: 'Eastern Asia',
+        cca2: 'JP',
+        cca3: 'JPN',
+        languages: { jpn: 'Japanese' },
+        currencies: { JPY: { name: 'Japanese yen', symbol: '¥' } },
+        independent: true,
+        unMember: true,
       },
       {
-        name: { official: 'Country B' },
-        flags: { svg: 'b.svg' },
+        name: { common: 'France', official: 'French Republic' },
         capital: ['B City'],
         population: 2000,
-        continents: ['Asia'],
+        region: 'Europe',
+        cca2: 'FR',
       },
     ]
 
     const promise = service.getCountries()
 
-    const req = httpMock.expectOne(enrichedCountryUrl)
+    const req = httpMock.expectOne(countriesDatasetUrl)
     expect(req.request.method).toBe('GET')
-    req.flush(mockCountries)
+    req.flush(mockCountriesDataset)
 
-    await expect(promise).resolves.toEqual(mockCountries)
-  })
-
-  it('should fallback to base fields when enriched fields are rejected', async () => {
-    const mockCountries = [
+    await expect(promise).resolves.toEqual([
       {
-        name: { official: 'Country A' },
-        flags: { svg: 'a.svg' },
+        name: { common: 'Japan', official: 'Japan' },
         capital: ['A City'],
         population: 1000,
-        continents: ['Europe'],
+        area: 500,
+        continents: ['Asia'],
+        region: 'Asia',
+        subregion: 'Eastern Asia',
+        cca3: 'JPN',
+        languages: { jpn: 'Japanese' },
+        currencies: { JPY: { name: 'Japanese yen', symbol: '¥' } },
+        independent: true,
+        unMember: true,
+        flags: {
+          svg: 'https://flags.restcountries.com/v5/svg/jp.svg',
+          alt: 'Flag of Japan',
+        },
       },
-    ]
-
-    const promise = service.getCountries()
-
-    httpMock.expectOne(enrichedCountryUrl).flush({ message: 'Bad request' })
-    await nextTick()
-    httpMock.expectOne(baseCountryUrl).flush(mockCountries)
-
-    await expect(promise).resolves.toEqual(mockCountries)
+      {
+        name: { common: 'France', official: 'French Republic' },
+        capital: ['B City'],
+        population: 2000,
+        area: undefined,
+        continents: ['Europe'],
+        region: 'Europe',
+        subregion: undefined,
+        cca3: undefined,
+        languages: undefined,
+        currencies: undefined,
+        independent: undefined,
+        unMember: undefined,
+        flags: {
+          svg: 'https://flags.restcountries.com/v5/svg/fr.svg',
+          alt: 'Flag of France',
+        },
+      },
+    ])
   })
 
   it('should reject when the API errors', async () => {
     const promise = service.getCountries()
 
-    httpMock.expectOne(enrichedCountryUrl).flush('Error loading', { status: 500, statusText: 'Server Error' })
-    await nextTick()
-    httpMock.expectOne(baseCountryUrl).flush('Error loading', { status: 500, statusText: 'Server Error' })
+    httpMock.expectOne(countriesDatasetUrl).flush('Error loading', { status: 500, statusText: 'Server Error' })
 
     await expect(promise).rejects.toBeDefined()
+  })
+
+  it('should reject when the dataset is not an array', async () => {
+    const promise = service.getCountries()
+
+    httpMock.expectOne(countriesDatasetUrl).flush({ success: false })
+
+    await expect(promise).rejects.toThrow('Expected countries dataset to return an array')
   })
 })

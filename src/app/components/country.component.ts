@@ -21,6 +21,27 @@ export function buildCountriesQuery(countryService: CountryService) {
   }
 }
 
+export function countryQueryErrorMessage(error: unknown): string {
+  if (error instanceof Error && error.message) {
+    return error.message
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    const maybeError = error as { message?: unknown; status?: unknown; statusText?: unknown; error?: unknown }
+
+    if (typeof maybeError.message === 'string' && maybeError.message) {
+      return maybeError.message
+    }
+
+    if (typeof maybeError.status === 'number') {
+      const statusText = typeof maybeError.statusText === 'string' ? ` ${maybeError.statusText}` : ''
+      return `Country API request failed with ${maybeError.status}${statusText}`
+    }
+  }
+
+  return 'Unable to load countries right now.'
+}
+
 @Component({
   selector: 'Country',
   standalone: true,
@@ -81,7 +102,9 @@ export function buildCountriesQuery(countryService: CountryService) {
             </div>
           </section>
         } @else if (query.isError()) {
-          <div class="text-error">{{ query.status() }}: {{ query.error() }}</div>
+          <div class="border border-error/30 bg-error/10 p-4 text-error">
+            {{ query.status() }}: {{ countryErrorMessage() }}
+          </div>
         } @else {
           <section class="relative overflow-hidden">
             <div
@@ -197,6 +220,8 @@ export class CountryComponent {
       return matchesSearch && matchesContinent
     })
   })
+
+  countryErrorMessage = computed(() => countryQueryErrorMessage(this.query.error()))
 
   setSearchText(event: Event): void {
     this.searchText.set((event.target as HTMLInputElement).value)

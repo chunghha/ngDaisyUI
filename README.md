@@ -1,27 +1,96 @@
 # ngDaisyUI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+Angular + Tailwind + DaisyUI demo for browsing country data with optional local AI-generated country briefs.
 
-## Development server
+## Stack
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Angular standalone components
+- Tailwind CSS and DaisyUI
+- TanStack Angular Query for country data loading
+- TanStack AI with a browser-safe llama.cpp adapter for local AI briefs
+- Vitest and Testing Library for tests
+- Biome for formatting and linting
 
-## Code scaffolding
+## Setup
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Install dependencies:
 
-## Build
+```bash
+pnpm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run the app:
 
-## Running unit tests
+```bash
+pnpm dev
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Open `http://localhost:4200/`.
 
-## Running end-to-end tests
+## Country Data
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Countries are loaded from the maintained public dataset:
 
-## Further help
+```text
+https://raw.githubusercontent.com/mledoze/countries/master/countries.json
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The app maps that dataset into the local `Country` shape and uses the free Rest Countries flag CDN for SVG flags.
+
+## Local AI Briefs
+
+The `Details` button on each country card calls a local llama.cpp server through TanStack AI.
+
+Expected llama.cpp endpoint:
+
+```text
+http://127.0.0.1:8080/v1/chat/completions
+```
+
+Start any compatible GGUF chat model with `llama-server` on port `8080`:
+
+```bash
+llama-server \
+  -m /path/to/model.gguf \
+  --host 127.0.0.1 \
+  --port 8080 \
+  -fa auto \
+  -c 32768 \
+  -rea off
+```
+
+The important requirements are:
+
+- Serve the OpenAI-compatible chat endpoint at `http://127.0.0.1:8080/v1/chat/completions`.
+- Use a chat/instruct GGUF model.
+- Disable reasoning with `-rea off` so llama.cpp returns final text in `message.content` instead of only `reasoning_content`.
+
+## Scripts
+
+```bash
+pnpm dev          # Start Angular dev server
+pnpm build        # Production build
+pnpm test         # Vitest
+pnpm test:cov     # Vitest with coverage
+pnpm check        # Biome check/fix for src
+pnpm check:all    # Biome check plus coverage
+```
+
+## Verification
+
+Before committing, run:
+
+```bash
+pnpm check:all
+```
+
+For a production build check:
+
+```bash
+pnpm build
+```
+
+Current build warnings are expected:
+
+- Initial bundle exceeds the configured warning budget.
+- `partial-json`, used by `@tanstack/ai`, is CommonJS and triggers an Angular optimization warning.
