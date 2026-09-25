@@ -185,4 +185,19 @@ describe('CountryComponent integration (smoke)', () => {
       expect(screen.queryByText('Republic of Guatemala')).toBeNull()
     })
   })
+
+  it('shows a friendly alert without a raw status prefix when loading fails', async () => {
+    const mockService: Partial<CountryService> = {
+      getCountries: vi.fn().mockRejectedValue(new Error('Network failed')),
+    }
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
+
+    await render((await import('./country.component')).CountryComponent, {
+      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+    })
+
+    const alert = await screen.findByRole('alert')
+    expect(alert.textContent ?? '').toContain('Network failed')
+    expect(alert.textContent ?? '').not.toMatch(/error\s*:/i)
+  })
 })

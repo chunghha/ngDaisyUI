@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
 import { injectQuery } from '@tanstack/angular-query-experimental'
-import { broaden } from '../query-keys'
+import { countryKeys } from '../query-keys'
 import { type Country, CountryService } from '../services/country.service'
 import { countryCapitals } from '../services/country-format'
 import { CountryCardComponent } from './country-card.component'
@@ -9,7 +9,7 @@ import { CountryCardComponent } from './country-card.component'
  * Exported for reuse in tests and potential other modules so we avoid
  * duplicating the literal countries query key.
  */
-export const COUNTRIES_QUERY_KEY = broaden(['countries'] as const, 1)
+export const COUNTRIES_QUERY_KEY = countryKeys.root()
 
 /**
  * Pure helper that builds the TanStack Query config for countries.
@@ -105,7 +105,7 @@ export function countryQueryErrorMessage(error: unknown): string {
           </section>
         } @else if (query.isError()) {
           <div role="alert" class="border border-error/30 bg-error/10 p-4 text-error">
-            {{ query.status() }}: {{ countryErrorMessage() }}
+            {{ countryErrorMessage() }}
           </div>
         } @else {
           <section class="relative overflow-hidden">

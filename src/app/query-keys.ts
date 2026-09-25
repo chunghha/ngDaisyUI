@@ -116,6 +116,25 @@ export const projectKeys = {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  COUNTRY KEYS                                                              */
+/* -------------------------------------------------------------------------- */
+
+export const countryKeys = {
+  /**
+   * Country domain root – invalidate to refresh all country queries.
+   * ['countries']
+   */
+  root: () => ['countries'] as const,
+
+  /**
+   * Country list with continent and search variants.
+   * ['countries','list',<continent|all>,<search|all>]
+   */
+  list: (filters?: { continent?: string; search?: string }) =>
+    ['countries', 'list', filters?.continent ?? 'all', filters?.search ?? 'all'] as const,
+}
+
+/* -------------------------------------------------------------------------- */
 /*  AGGREGATION                                                               */
 /* -------------------------------------------------------------------------- */
 
@@ -126,6 +145,7 @@ export const queryKeys = {
   user: userKeys,
   theme: themeKeys,
   project: projectKeys,
+  country: countryKeys,
 }
 
 /* -------------------------------------------------------------------------- */

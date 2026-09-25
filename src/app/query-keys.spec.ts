@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { type AnyQueryKey, broaden, keyStartsWith, projectKeys, themeKeys, userKeys } from './query-keys'
+import { type AnyQueryKey, broaden, countryKeys, keyStartsWith, projectKeys, themeKeys, userKeys } from './query-keys'
 
 describe('query-keys helpers', () => {
   describe('userKeys', () => {
@@ -51,6 +51,18 @@ describe('query-keys helpers', () => {
 
     it('detail structure', () => {
       expect(projectKeys.detail('p42')).toEqual(['project', 'detail', 'p42'])
+    })
+  })
+
+  describe('countryKeys', () => {
+    it('root is a stable countries literal', () => {
+      expect(countryKeys.root()).toEqual(['countries'])
+      expect(countryKeys.root()).toStrictEqual(countryKeys.root())
+    })
+
+    it('list supports continent and search variants', () => {
+      expect(countryKeys.list()).toEqual(['countries', 'list', 'all', 'all'])
+      expect(countryKeys.list({ continent: 'Asia', search: 'tokyo' })).toEqual(['countries', 'list', 'Asia', 'tokyo'])
     })
   })
 
@@ -106,6 +118,9 @@ describe('query-keys helpers', () => {
         projectKeys.root(),
         projectKeys.list(),
         projectKeys.detail('pid'),
+        countryKeys.root(),
+        countryKeys.list(),
+        countryKeys.list({ continent: 'Asia', search: 'tokyo' }),
       ]
 
       const isPrimitive = (v: unknown) => ['string', 'number', 'boolean'].includes(typeof v)
