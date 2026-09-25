@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
 import { injectQuery } from '@tanstack/angular-query-experimental'
 import { broaden } from '../query-keys'
 import { type Country, CountryService } from '../services/country.service'
@@ -45,6 +45,7 @@ export function countryQueryErrorMessage(error: unknown): string {
 @Component({
   selector: 'Country',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="relative overflow-hidden bg-gradient-to-br from-base-100 via-neutral/70 to-base-100 px-3 sm:px-5">
       <div

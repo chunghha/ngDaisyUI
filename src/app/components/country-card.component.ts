@@ -1,4 +1,4 @@
-import { Component, Input, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, Input, inject, signal } from '@angular/core'
 import type { Country } from '../services/country.service'
 import { CountryInfoService } from '../services/country-info.service'
 
@@ -30,6 +30,7 @@ function parseCountryInfoBullets(countryInfo: string): CountryInfoBullet[] {
 @Component({
   selector: 'CountryCard',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article
       class="group flex h-full flex-col overflow-hidden border border-base-300 bg-base-100 shadow-base-content/10 shadow-md transition duration-300 ease-out hover:-translate-y-1 hover:border-primary/60 hover:shadow-primary/20 hover:shadow-xl"
@@ -141,12 +142,10 @@ export class CountryCardComponent {
   countryInfo = signal('')
   isGeneratingCountryInfo = signal(false)
 
-  countryInfoBullets(): CountryInfoBullet[] {
-    return parseCountryInfoBullets(this.countryInfo())
-  }
+  countryInfoBullets = computed<CountryInfoBullet[]>(() => parseCountryInfoBullets(this.countryInfo()))
 
   countryCapitals(): string[] {
-    return Array.isArray(this.country.capital) ? this.country.capital : []
+    return Array.isArray(this.country.capital) ? (this.country.capital ?? []) : []
   }
 
   countryRegionLabel(): string {
@@ -155,7 +154,7 @@ export class CountryCardComponent {
 
   populationDensity(): string {
     if (!this.country.area) return 'N/A'
-    return `${Math.round(this.country.population / this.country.area).toLocaleString()}/km²`
+    return `${Math.round(this.country.population / (this.country.area ?? 1)).toLocaleString()}/km²`
   }
 
   firstLanguage(): string | undefined {
@@ -163,7 +162,7 @@ export class CountryCardComponent {
   }
 
   countryAreaLabel(): string {
-    return this.country.area ? `${this.country.area.toLocaleString()} km²` : 'N/A'
+    return this.country.area ? `${this.country.area?.toLocaleString()} km²` : 'N/A'
   }
 
   countryMapUrl(): string {

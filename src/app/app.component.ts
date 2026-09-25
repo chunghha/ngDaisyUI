@@ -1,7 +1,7 @@
-import { Component, DOCUMENT, Inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DOCUMENT, effect, inject } from '@angular/core'
+import { toSignal } from '@angular/core/rxjs-interop'
 import { RouterModule } from '@angular/router'
 import { select } from '@ngneat/elf'
-import { Subscription } from 'rxjs'
 
 import { NavbarComponent } from './components/navbar.component'
 import { THEMES, themeStore } from './stores/theme.store'
@@ -9,6 +9,7 @@ import { THEMES, themeStore } from './stores/theme.store'
 @Component({
   selector: 'app-root',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-[linear-gradient(120deg,var(--color-base-100),var(--color-neutral))] p-3 sm:p-5">
       <div class="mx-auto max-w-8xl">
@@ -22,20 +23,19 @@ import { THEMES, themeStore } from './stores/theme.store'
 export class AppComponent {
   title = 'ngDaisyUI'
 
-  theme = 'dark'
-  themeSubscription: Subscription = new Subscription()
+  private readonly document = inject(DOCUMENT)
+  private readonly theme = toSignal(themeStore.pipe(select((state) => state.theme)), {
+    initialValue: { isDark: false },
+  })
 
-  constructor(@Inject(DOCUMENT) _document: Document) {}
-
-  ngOnInit() {
-    this.themeSubscription = themeStore.pipe(select((state) => state.theme)).subscribe((s) => this.setTheme(s?.isDark))
-  }
-
-  ngOnDestroy() {
-    this.themeSubscription.unsubscribe()
+  constructor() {
+    // Decision: effect instead of manual subscribe to avoid Subscription lifecycle.
+    effect(() => {
+      this.setTheme(this.theme()?.isDark)
+    })
   }
 
   private setTheme(isDark?: boolean) {
-    document.body.setAttribute('data-theme', isDark ? THEMES.DARK : THEMES.LIGHT)
+    this.document.body.setAttribute('data-theme', isDark ? THEMES.DARK : THEMES.LIGHT)
   }
 }
