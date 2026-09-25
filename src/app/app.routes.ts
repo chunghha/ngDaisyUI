@@ -9,4 +9,5 @@ export const routes: Routes = [
     path: 'country',
     loadComponent: () => import('./components/country.component').then((c) => c.CountryComponent),
   },
+  { path: '**', redirectTo: '' },
 ]

@@ -1,14 +1,11 @@
 import { Service } from '@angular/core'
 import { chat } from '@tanstack/ai'
 import type { Country } from './country.service'
+import { firstValue } from './country-format'
 import { createLlamaCppBrowserChat } from './llama-cpp-browser-adapter'
 
 const COUNTRY_INFO_MODEL = 'local-gguf'
 const LLAMA_CPP_HOST = 'http://127.0.0.1:8080'
-
-function firstValue(values?: Record<string, string>): string | undefined {
-  return Object.values(values ?? {})[0]
-}
 
 function languageList(languages?: Record<string, string>): string {
   return Object.values(languages ?? {}).join(', ') || 'N/A'

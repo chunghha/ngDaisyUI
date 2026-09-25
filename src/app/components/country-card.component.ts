@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, Input, inject, signal } from '@angular/core'
 import type { Country } from '../services/country.service'
+import { countryCapitals, firstValue } from '../services/country-format'
 import { CountryInfoService } from '../services/country-info.service'
-
-function firstValue(values?: Record<string, string>): string | undefined {
-  return Object.values(values ?? {})[0]
-}
 
 interface CountryInfoBullet {
   label: string
@@ -145,7 +142,7 @@ export class CountryCardComponent {
   countryInfoBullets = computed<CountryInfoBullet[]>(() => parseCountryInfoBullets(this.countryInfo()))
 
   countryCapitals(): string[] {
-    return Array.isArray(this.country.capital) ? (this.country.capital ?? []) : []
+    return countryCapitals(this.country)
   }
 
   countryRegionLabel(): string {

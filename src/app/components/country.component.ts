@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { injectQuery } from '@tanstack/angular-query-experimental'
 import { broaden } from '../query-keys'
 import { type Country, CountryService } from '../services/country.service'
+import { countryCapitals } from '../services/country-format'
 import { CountryCardComponent } from './country-card.component'
 
 /**
@@ -103,7 +104,7 @@ export function countryQueryErrorMessage(error: unknown): string {
             </div>
           </section>
         } @else if (query.isError()) {
-          <div class="border border-error/30 bg-error/10 p-4 text-error">
+          <div role="alert" class="border border-error/30 bg-error/10 p-4 text-error">
             {{ query.status() }}: {{ countryErrorMessage() }}
           </div>
         } @else {
@@ -239,6 +240,6 @@ export class CountryComponent {
   }
 
   private countryCapitals(country: Country): string[] {
-    return Array.isArray(country.capital) ? country.capital : []
+    return countryCapitals(country)
   }
 }

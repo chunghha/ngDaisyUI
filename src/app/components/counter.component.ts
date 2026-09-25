@@ -9,7 +9,7 @@ import { counter, decreaseCounter, increaseCounter } from '../stores/counter.sto
     <div class="flex items-center justify-center gap-3 text-center font-poppins">
       <button
         type="button"
-        aria-label="-"
+        aria-label="Decrease counter"
         class="btn btn-secondary btn-circle btn-sm shadow-md shadow-secondary/30 transition-transform hover:-translate-y-0.5"
         (click)="decrease()"
       >
@@ -18,7 +18,7 @@ import { counter, decreaseCounter, increaseCounter } from '../stores/counter.sto
       <span class="min-w-24 font-bold text-base-content">Counter: {{ count() }}</span>
       <button
         type="button"
-        aria-label="+"
+        aria-label="Increase counter"
         class="btn btn-secondary btn-circle btn-sm shadow-md shadow-secondary/30 transition-transform hover:-translate-y-0.5"
         (click)="increase()"
       >

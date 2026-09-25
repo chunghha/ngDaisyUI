@@ -16,9 +16,9 @@ function createMediaQuerySignal(query: string): Signal<boolean> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="btn-group flex justify-center gap-2 p-8">
-      <button type="button" [class]="buttonClasses(smActive())">sm</button>
-      <button type="button" [class]="buttonClasses(lgActive())">lg</button>
-      <button type="button" [class]="buttonClasses(xlActive())">xl</button>
+      <button type="button" [class]="buttonClasses(smActive())" [attr.aria-pressed]="smActive()">sm</button>
+      <button type="button" [class]="buttonClasses(lgActive())" [attr.aria-pressed]="lgActive()">lg</button>
+      <button type="button" [class]="buttonClasses(xlActive())" [attr.aria-pressed]="xlActive()">xl</button>
     </div>
   `,
 })

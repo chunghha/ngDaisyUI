@@ -18,7 +18,7 @@ describe('CounterComponent', () => {
     const user = userEvent.setup()
     await render(CounterComponent)
 
-    await user.click(screen.getByRole('button', { name: '+' }))
+    await user.click(screen.getByRole('button', { name: 'Increase counter' }))
 
     expect(screen.getByText(/Counter:\s*1/)).toBeTruthy()
   })
@@ -27,7 +27,7 @@ describe('CounterComponent', () => {
     const user = userEvent.setup()
     await render(CounterComponent)
 
-    await user.click(screen.getByRole('button', { name: '-' }))
+    await user.click(screen.getByRole('button', { name: 'Decrease counter' }))
 
     expect(screen.getByText(/Counter:\s*-1/)).toBeTruthy()
   })
@@ -36,8 +36,8 @@ describe('CounterComponent', () => {
     const user = userEvent.setup()
     await render(CounterComponent)
 
-    const incrementBtn = screen.getByRole('button', { name: '+' })
-    const decrementBtn = screen.getByRole('button', { name: '-' })
+    const incrementBtn = screen.getByRole('button', { name: 'Increase counter' })
+    const decrementBtn = screen.getByRole('button', { name: 'Decrease counter' })
 
     await user.click(incrementBtn)
     await user.click(incrementBtn)
