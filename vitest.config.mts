@@ -17,6 +17,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "happy-dom",
+    // Reuse happy-dom once per worker instead of once per file (14 files
+    // were paying ~27s env setup). vmThreads keeps per-file isolation.
+    pool: "vmThreads",
     setupFiles: ["./src/setupTest.js"],
     exclude: ["dist/**", "dist/test-out/**", "node_modules/**"],
     coverage: {
