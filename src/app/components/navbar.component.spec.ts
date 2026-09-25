@@ -60,6 +60,15 @@ describe('NavbarComponent (theme toggle)', () => {
     expect(isDark()).toBe(false)
   })
 
+  it('exposes the navigation menu with menu roles', async () => {
+    await renderNavbar()
+
+    expect(screen.getByRole('menu')).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Homepage' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'About' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Country' })).toBeTruthy()
+  })
+
   it('should not introduce unexpected properties in the store state', async () => {
     await renderNavbar()
 

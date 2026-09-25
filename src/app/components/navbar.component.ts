@@ -10,7 +10,7 @@ import { themeStore } from '../stores/theme.store'
     <div class="navbar sticky top-4 z-50 mb-4 rounded-full border border-base-content/10 bg-base-100/80 px-4 shadow-xl shadow-base-content/5 backdrop-blur-xl">
       <div class="navbar-start">
         <div class="dropdown z-[1000]">
-          <button tabindex="0" class="btn btn-ghost btn-circle" aria-label="Open navigation menu">
+          <button tabindex="0" class="btn btn-ghost btn-circle" aria-label="Open navigation menu" aria-haspopup="menu">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -28,11 +28,12 @@ import { themeStore } from '../stores/theme.store'
           </button>
           <ul
             tabindex="0"
+            role="menu"
             class="menu menu-compact dropdown-content mt-3 w-52 rounded-3xl border border-base-content/10 bg-base-100 p-2 shadow-2xl"
           >
-            <li><a routerLink="">Homepage</a></li>
-            <li><a routerLink="about">About</a></li>
-            <li><a routerLink="country">Country</a></li>
+            <li role="none"><a role="menuitem" routerLink="">Homepage</a></li>
+            <li role="none"><a role="menuitem" routerLink="about">About</a></li>
+            <li role="none"><a role="menuitem" routerLink="country">Country</a></li>
           </ul>
         </div>
       </div>

@@ -186,6 +186,43 @@ describe('CountryComponent integration (smoke)', () => {
     })
   })
 
+  it('marks the selected continent with aria-pressed', async () => {
+    const data = [
+      {
+        name: { official: 'Republic of Argentina' },
+        capital: ['Buenos Aires'],
+        continents: ['South America'],
+        flags: { svg: 'ar.svg' },
+        population: 45_000_000,
+      },
+      {
+        name: { official: 'Republic of Guatemala' },
+        capital: ['Guatemala City'],
+        continents: ['North America'],
+        flags: { svg: 'gt.svg' },
+        population: 18_000_000,
+      },
+    ]
+    const mockService: Partial<CountryService> = {
+      getCountries: vi.fn().mockResolvedValue(data),
+    }
+    const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
+
+    await render((await import('./country.component')).CountryComponent, {
+      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+    })
+
+    const allButton = await screen.findByRole('button', { name: 'All' })
+    expect(allButton.getAttribute('aria-pressed')).toBe('true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'South America' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'South America' }).getAttribute('aria-pressed')).toBe('true')
+      expect(screen.getByRole('button', { name: 'All' }).getAttribute('aria-pressed')).toBe('false')
+    })
+  })
+
   it('shows a friendly alert without a raw status prefix when loading fails', async () => {
     const mockService: Partial<CountryService> = {
       getCountries: vi.fn().mockRejectedValue(new Error('Network failed')),

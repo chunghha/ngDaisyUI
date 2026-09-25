@@ -162,6 +162,7 @@ export function countryQueryErrorMessage(error: unknown): string {
                 <button
                   type="button"
                   [class]="continentButtonClasses(continent)"
+                  [attr.aria-pressed]="selectedContinent() === continent"
                   (click)="selectedContinent.set(continent)"
                 >
                   {{ continent }}
