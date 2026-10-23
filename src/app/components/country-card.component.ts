@@ -1,6 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, Input, inject, signal } from '@angular/core'
 import type { Country } from '../services/country.service'
-import { countryCapitals, firstValue } from '../services/country-format'
+import {
+  countryAreaLabel,
+  countryCapitals,
+  countryRegionLabel,
+  firstValue,
+  populationDensity,
+} from '../services/country-format'
 import { CountryInfoService } from '../services/country-info.service'
 
 interface CountryInfoBullet {
@@ -146,12 +152,11 @@ export class CountryCardComponent {
   }
 
   countryRegionLabel(): string {
-    return this.country.subregion ?? this.country.region ?? this.country.continents.join(', ')
+    return countryRegionLabel(this.country)
   }
 
   populationDensity(): string {
-    if (!this.country.area) return 'N/A'
-    return `${Math.round(this.country.population / (this.country.area ?? 1)).toLocaleString()}/km²`
+    return populationDensity(this.country)
   }
 
   firstLanguage(): string | undefined {
@@ -159,7 +164,7 @@ export class CountryCardComponent {
   }
 
   countryAreaLabel(): string {
-    return this.country.area ? `${this.country.area?.toLocaleString()} km²` : 'N/A'
+    return countryAreaLabel(this.country)
   }
 
   countryMapUrl(): string {
