@@ -8,9 +8,9 @@ import { CounterComponent } from './counter.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="hero relative min-h-[calc(100vh-7rem)] overflow-hidden border border-base-300 bg-base-100 text-contrast shadow-2xl">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(234,157,52,0.25),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(86,148,159,0.28),transparent_30%),linear-gradient(135deg,rgba(215,130,126,0.16),transparent_42%)]"></div>
-      <div class="pointer-events-none absolute top-8 right-10 hidden h-32 w-32 rounded-full border border-primary/30 md:block"></div>
-      <div class="pointer-events-none absolute bottom-10 left-8 hidden h-20 w-20 rounded-full bg-secondary/20 blur-sm md:block"></div>
+      <div aria-hidden="true" class="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(234,157,52,0.25),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(86,148,159,0.28),transparent_30%),linear-gradient(135deg,rgba(215,130,126,0.16),transparent_42%)]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-8 right-10 hidden h-32 w-32 rounded-full border border-primary/30 md:block"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute bottom-10 left-8 hidden h-20 w-20 rounded-full bg-secondary/20 blur-sm md:block"></div>
 
       <div class="hero-content relative z-10 grid w-full max-w-7xl gap-12 px-6 py-14 text-left lg:grid-cols-[1.05fr_0.95fr] lg:px-12">
         <div class="max-w-3xl">
