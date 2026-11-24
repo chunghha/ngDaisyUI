@@ -1,4 +1,4 @@
-import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental'
+import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular'
 import { describe, expect, it, vi } from 'vitest'
 import { CountryService } from '../services/country.service'
@@ -81,7 +81,7 @@ describe('CountryComponent integration (smoke)', () => {
       // NOTE: we can import CountryComponent directly but only need its query side effect.
       (await import('./country.component')).CountryComponent,
       {
-        providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+        providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
       },
     )
 
@@ -103,7 +103,7 @@ describe('CountryComponent integration (smoke)', () => {
     })
 
     await render((await import('./country.component')).CountryComponent, {
-      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+      providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
     })
 
     await Promise.resolve()
@@ -137,7 +137,7 @@ describe('CountryComponent integration (smoke)', () => {
     const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
 
     await render((await import('./country.component')).CountryComponent, {
-      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+      providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
     })
 
     expect(await screen.findByText('Republic of Korea')).toBeTruthy()
@@ -173,7 +173,7 @@ describe('CountryComponent integration (smoke)', () => {
     const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
 
     await render((await import('./country.component')).CountryComponent, {
-      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+      providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
     })
 
     expect(await screen.findByText('Republic of Argentina')).toBeTruthy()
@@ -209,7 +209,7 @@ describe('CountryComponent integration (smoke)', () => {
     const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
 
     await render((await import('./country.component')).CountryComponent, {
-      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+      providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
     })
 
     const allButton = await screen.findByRole('button', { name: 'All' })
@@ -230,7 +230,7 @@ describe('CountryComponent integration (smoke)', () => {
     const qc = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 0 } } })
 
     await render((await import('./country.component')).CountryComponent, {
-      providers: [provideTanStackQuery(qc), { provide: CountryService, useValue: mockService }],
+      providers: [provideTanStackQuery(() => qc), { provide: CountryService, useValue: mockService }],
     })
 
     const alert = await screen.findByRole('alert')

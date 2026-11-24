@@ -38,7 +38,7 @@ describe('CountryInfoService', () => {
   })
 
   it('requests concise country info from TanStack AI using llama.cpp', async () => {
-    chatMock.mockResolvedValue('* Why it matters: Seoul anchors a highly urbanized tech economy.')
+    chatMock.mockResolvedValue({ text: '* Why it matters: Seoul anchors a highly urbanized tech economy.', chunks: [] })
 
     const result = await TestBed.inject(CountryInfoService).describeCountry(country)
 
@@ -48,6 +48,7 @@ describe('CountryInfoService', () => {
       expect.objectContaining({
         adapter: 'llama-cpp-adapter',
         stream: false,
+        threadId: 'country-info:KOR',
         systemPrompts: [expect.stringContaining('precise country analyst')],
       }),
     )
@@ -81,7 +82,7 @@ describe('CountryInfoService', () => {
   })
 
   it('returns a helpful message when the model returns empty text', async () => {
-    chatMock.mockResolvedValue('')
+    chatMock.mockResolvedValue({ text: '', chunks: [] })
 
     const result = await TestBed.inject(CountryInfoService).describeCountry(country)
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
-import { injectQuery } from '@tanstack/angular-query-experimental'
+import { injectQuery } from '@tanstack/angular-query'
 import { countryKeys } from '../query-keys'
 import { type Country, CountryService } from '../services/country.service'
 import { countryCapitals } from '../services/country-format'

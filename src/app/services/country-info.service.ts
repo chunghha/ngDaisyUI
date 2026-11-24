@@ -67,6 +67,7 @@ export class CountryInfoService {
       const countryInfo = await chat({
         adapter: this.#adapter,
         stream: false,
+        threadId: `country-info:${country.cca3 ?? country.name.official}`,
         systemPrompts: [
           'Answer directly with final text only. You are a precise country analyst for an atlas UI. Prefer specific, verifiable details over generic travel copy. Do not show reasoning.',
         ],
@@ -74,7 +75,7 @@ export class CountryInfoService {
       })
 
       return (
-        normalizeCountryInfo(countryInfo) ||
+        normalizeCountryInfo(countryInfo.text) ||
         'The local model returned an empty answer. Restart llama-server with -rea off and try again.'
       )
     } catch (_error) {

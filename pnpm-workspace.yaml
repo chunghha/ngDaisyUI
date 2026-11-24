@@ -39,3 +39,7 @@ minimumReleaseAgeExclude:
   - '@typescript/typescript-win32-arm64@7.0.2'
   - '@typescript/typescript-win32-x64@7.0.2'
   - typescript@7.0.2
+  - '@tanstack/angular-query-devtools@5.108.4'
+  - '@tanstack/angular-query@5.108.4'
+  - '@tanstack/query-core@5.108.4'
+  - '@tanstack/query-devtools@5.108.4'
