@@ -27,7 +27,8 @@
               "node_modules/@fontsource/fira-mono/index.css"
             ],
             "scripts": [],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "allowedCommonJsDependencies": ["partial-json"]
           },
           "configurations": {
             "production": {
